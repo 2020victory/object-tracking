@@ -5,24 +5,24 @@ import json
 parser = argparse.ArgumentParser(description='Opencv')
 
 parser.add_argument('--track', '-t', action='store_true',
-                       help='To prompt tracking')
+                    help='To prompt tracking')
 
 parser.add_argument("--type", type=str, default="kcf", required=False,
-	help="OpenCV object tracker type")
+                    help="OpenCV object tracker type")
 
 args = parser.parse_args()
 
 OPENCV_OBJECT_TRACKERS = {
-		"csrt": cv2.TrackerCSRT_create,
-		"kcf": cv2.TrackerKCF_create,
-		# "boosting": cv2.TrackerBoosting_create,
-		"mil": cv2.TrackerMIL_create,
-		# "tld": cv2.TrackerTLD_create,
-		# "medianflow": cv2.TrackerMedianFlow_create,
-		# "mosse": cv2.TrackerMOSSE_create
-	}
+    "csrt": cv2.TrackerCSRT_create,
+    "kcf": cv2.TrackerKCF_create,
+    # "boosting": cv2.TrackerBoosting_create,
+    "mil": cv2.TrackerMIL_create,
+    # "tld": cv2.TrackerTLD_create,
+    # "medianflow": cv2.TrackerMedianFlow_create,
+    # "mosse": cv2.TrackerMOSSE_create
+}
 
-print(args.type)
+print('type: ' + args.type)
 
 if not args.type in list(OPENCV_OBJECT_TRACKERS.keys()):
     print("Invalid class")
@@ -41,13 +41,13 @@ if args.track:
         if k == 27:
             break
     bbox = cv2.selectROI(frame, False)
-    cv2.imwrite('file.jpg', frame)
+    cv2.imwrite('object.jpg', frame)
     with open('coordinates.json', 'w') as fh:
         fh.write(json.dumps({"coord": list(bbox)}))
     cv2.destroyWindow("ROI selector")
 
 
-frame = cv2.imread('file.jpg')
+frame = cv2.imread('object.jpg')
 with open('coordinates.json') as fh:
     obj = json.loads(fh.read())
     bbox = tuple(obj['coord'])
